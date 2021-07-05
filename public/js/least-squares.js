@@ -99,17 +99,16 @@ function init() {
       slopeDivisor !== 0 ? parseFloat(slopeDividend / slopeDivisor) : 0;
 
     // calculate coeficient = c = a
-    const coeficient = parseFloat(
-      (-(slope * average.x) + average.y).toFixed(3)
-    );
+    const coeficient = parseFloat((average.y - slope * average.x).toFixed(3));
 
-    // calculate the line equation (y = c + mx or y = a + bx)
+    // calculate the line equation (y = mx + c or y = bx + a)
     currentData.line = currentData.pairs.map((pair) => ({
       x: pair.x,
-      y: parseFloat((coeficient + slope * pair.x).toFixed(3)),
+      y: parseFloat((slope * pair.x + coeficient).toFixed(3)),
     }));
-
-    spanFormula.innerHTML = `Formula: Y = ${coeficient} + ${slope} * X`;
+    spanFormula.innerHTML = `Formula: y = ${parseFloat(slope).toFixed(
+      3
+    )} * x + ${coeficient}`;
   }
 
   // update table every time there's a new input
@@ -127,7 +126,7 @@ function init() {
     tablePairs.querySelector("tbody").appendChild(tr);
   }
 
-  //
+  // clear inputs
   function clearInputs() {
     inputX.value = "";
     inputY.value = "";
@@ -142,12 +141,12 @@ function init() {
       data: {
         datasets: [
           {
-            label: "Scatter Dataset",
+            label: "Scatter Dataset (Actual)",
             backgroundColor: "rgb(125,67,120)",
             data: [],
           },
           {
-            label: "Line Dataset",
+            label: "Line Dataset (Prediction)",
             fill: false,
             data: [],
             type: "line",
